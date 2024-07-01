@@ -15,8 +15,8 @@ spring:
     url: jdbc:mysql://localhost:4321/cow-instagram-container?
     username: myuser
     password: password
-  jwt:
-    secret: "spring.jwt.secret=vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
+#  jwt:
+#    secret: "spring.jwt.secret=vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
 
   docker:
     compose:

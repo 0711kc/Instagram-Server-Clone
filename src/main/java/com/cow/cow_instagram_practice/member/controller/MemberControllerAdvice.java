@@ -28,4 +28,10 @@ public class MemberControllerAdvice {
 	public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
 	}
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseEntity<String> handleIllegalStateException(IllegalStateException exception) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+	}
 }

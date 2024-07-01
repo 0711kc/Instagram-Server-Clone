@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cow.cow_instagram_practice.image.service.ImageService;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.member.service.MemberService;
