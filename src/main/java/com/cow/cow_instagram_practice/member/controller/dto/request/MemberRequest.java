@@ -48,6 +48,16 @@ public class MemberRequest {
 	private MemberRole role;
 
 	public Member toEntity(final ProfileImage profileImage) {
-		return Member.of(id, password, name, nickname, phone, email, profileImage, role.getIndex());
+		// return Member.of(id, password, name, nickname, phone, email, profileImage, role.getIndex());
+		return Member.builder()
+			.id(id)
+			.password(password)
+			.name(name)
+			.nickname(nickname)
+			.phone(phone)
+			.email(email)
+			.profileImage(profileImage)
+			.role(role.getIndex())
+			.build();
 	}
 }

@@ -1,17 +1,28 @@
 package com.cow.cow_instagram_practice.member.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cow.cow_instagram_practice.comment.entity.Comment;
+import com.cow.cow_instagram_practice.post.entity.Post;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 	@Id
@@ -38,30 +49,19 @@ public class Member {
 
 	private Short role;
 
-	@Builder
-	private Member(final String id, final String password, final String name, final String nickname,
-		final String phone, final String email, final ProfileImage profileImage, final Short role) {
-		this.id = id;
-		this.password = password;
-		this.name = name;
-		this.nickname = nickname;
-		this.phone = phone;
-		this.email = email;
-		this.profileImage = profileImage;
-		this.role = role;
-	}
+	@Builder.Default
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private final List<Post> posts = new ArrayList<>();
 
-	public static Member of(final String id, final String password, final String name, final String nickname,
-		final String phone, final String email, final ProfileImage profileImage, final Short role) {
-		return Member.builder()
-			.id(id)
-			.password(password)
-			.name(name)
-			.nickname(nickname)
-			.phone(phone)
-			.email(email)
-			.profileImage(profileImage)
-			.role(role)
-			.build();
-	}
+	@Builder.Default
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	private final List<Comment> comments = new ArrayList<>();
+
+	@Builder.Default
+	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
+	private final List<Follow> followers = new ArrayList<>();
+
+	@Builder.Default
+	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
+	private final List<Follow> followings = new ArrayList<>();
 }
