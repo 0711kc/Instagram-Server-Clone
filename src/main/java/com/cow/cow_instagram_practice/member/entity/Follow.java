@@ -25,11 +25,11 @@ public class Follow {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "follower")
+	@JoinColumn(name = "follower_id")
 	private Member follower;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "following")
+	@JoinColumn(name = "following_id")
 	private Member following;
 
 	public static Follow of(Member follower, Member following) {
