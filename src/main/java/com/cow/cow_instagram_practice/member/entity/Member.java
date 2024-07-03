@@ -56,12 +56,4 @@ public class Member {
 	@Builder.Default
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private final List<Comment> comments = new ArrayList<>();
-
-	@Builder.Default
-	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
-	private final List<Follow> followers = new ArrayList<>();
-
-	@Builder.Default
-	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
-	private final List<Follow> followings = new ArrayList<>();
 }

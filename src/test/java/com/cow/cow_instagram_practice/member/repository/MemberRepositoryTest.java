@@ -67,8 +67,6 @@ public class MemberRepositoryTest {
 		Assertions.assertThat(savedMember.getProfileImage().getImageLink()).isEqualTo(imageLink);
 		Assertions.assertThat(savedMember.getPosts().size()).isEqualTo(0);
 		Assertions.assertThat(savedMember.getComments().size()).isEqualTo(0);
-		Assertions.assertThat(savedMember.getFollowers().size()).isEqualTo(0);
-		Assertions.assertThat(savedMember.getFollowings().size()).isEqualTo(0);
 	}
 
 	@Test
