@@ -16,7 +16,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.jwt.LoginFilter;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
+@Tag(name = "Member", description = "회원 관련 API")
 public class SecurityConfig implements WebMvcConfigurer {
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
@@ -32,8 +37,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 	};
 
 	private final String[] WHITE_LIST_SWAGGER = {
-		"/swagger-ui/**"
-		// "/v3/api-docs/**"
+		"/swagger-ui/**",
+		"/v3/api-docs/**"
 	};
 
 	// TODO DELETE와 GET은 나중에 지워야됨
@@ -44,10 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final String[] WHITE_LIST_PATCH = {
 		"/member/{memberId}"
 	};
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
-		this.authenticationConfiguration = authenticationConfiguration;
-		this.jwtUtil = jwtUtil;
-	}
+
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
