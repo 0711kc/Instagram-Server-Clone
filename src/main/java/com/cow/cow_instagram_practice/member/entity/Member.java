@@ -29,7 +29,7 @@ public class Member {
 	@Size(max = 12)
 	private String id;
 
-	@Size(max = 20)
+	@Size(max = 80)
 	private String password;
 
 	@Size(max = 8)
@@ -47,7 +47,8 @@ public class Member {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private ProfileImage profileImage;
 
-	private Short role;
+	@Size(max = 12)
+	private String role;
 
 	@Builder.Default
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -56,4 +57,8 @@ public class Member {
 	@Builder.Default
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private final List<Comment> comments = new ArrayList<>();
+
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 }

@@ -8,34 +8,33 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum MemberRole {
-	User("user", (short)0),
-	Admin("admin", (short)1);
+	User("user", "ROLE_USER"),
+	Admin("admin", "ROLE_ADMIN");
 
 	private final String description;
 
-	@Getter
-	private final Short index;
-
-	@JsonCreator
-	public static MemberRole from(String role) {
-		return Arrays.stream(MemberRole.values())
-			.filter(memberRole -> memberRole.getDescription().equals(role))
-			.findFirst()
-			.orElseThrow(IllegalArgumentException::new);
-	}
-
-	public static String getDescription(Short index) {
-		return Arrays.stream(MemberRole.values())
-			.filter(memberRole -> memberRole.getIndex().equals(index))
-			.findFirst()
-			.orElseThrow(IllegalArgumentException::new)
-			.getDescription();
-	}
+	private final String permission;
 
 	@JsonValue
 	public String getDescription() {
 		return description;
+	}
+
+	@JsonCreator
+	public static MemberRole from(String description) {
+		return Arrays.stream(MemberRole.values())
+			.filter(memberRole -> memberRole.getDescription().equals(description))
+			.findFirst()
+			.orElseThrow(IllegalArgumentException::new);
+	}
+
+	public static MemberRole findByPermission(String permission) {
+		return Arrays.stream(MemberRole.values())
+			.filter(memberRole -> memberRole.getPermission().equals(permission))
+			.findFirst()
+			.orElseThrow(IllegalArgumentException::new);
 	}
 }

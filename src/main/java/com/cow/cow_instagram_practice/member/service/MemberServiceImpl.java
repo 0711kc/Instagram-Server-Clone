@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 	private final ProfileImageRepository profileImageRepository;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public ResponseEntity<MemberResponse> join(MemberRequest memberRequest) {
@@ -34,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
 		ProfileImage defaultImage = profileImageRepository.findById(1L)
 			.orElseThrow(() -> new IllegalStateException("[Error] 기본 프로필 이미지에 접근할 수 없습니다."));
 		Member member = memberRequest.toEntity(defaultImage);
+		member.updatePassword(bCryptPasswordEncoder.encode(memberRequest.getPassword()));
 		Member savedMember = memberRepository.save(member);
 		return ResponseEntity.status(HttpStatus.CREATED)
 			.contentType(MediaType.APPLICATION_JSON)

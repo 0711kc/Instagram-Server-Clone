@@ -42,7 +42,7 @@ public class MemberResponse {
 			.phone(member.getPhone())
 			.email(member.getEmail())
 			.image(member.getProfileImage().getImageLink())
-			.role(MemberRole.getDescription(member.getRole()))
+			.role(MemberRole.findByPermission(member.getRole()).getPermission())
 			.build();
 	}
 }

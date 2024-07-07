@@ -30,10 +30,4 @@ public class MemberController {
 	public ResponseEntity<MemberResponse> findMember(@PathVariable final String memberId) {
 		return memberService.findOne(memberId);
 	}
-
-	// @GetMapping("/login")
-	// public ResponseEntity<MemberResponse> findMember(@RequestParam("id") final String memberId,
-	// 	@RequestParam("pw") final String password) {
-	//
-	// }
 }
