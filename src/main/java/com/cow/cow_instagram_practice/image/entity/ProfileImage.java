@@ -1,4 +1,4 @@
-package com.cow.cow_instagram_practice.member.entity;
+package com.cow.cow_instagram_practice.image.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

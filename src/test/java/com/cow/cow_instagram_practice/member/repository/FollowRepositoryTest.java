@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 import com.cow.cow_instagram_practice.member.entity.Follow;
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
