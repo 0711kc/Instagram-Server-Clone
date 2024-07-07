@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 
 public interface MemberService {
 	ResponseEntity<MemberResponse> findOne(String memberId);

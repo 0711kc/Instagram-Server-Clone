@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
-import com.cow.cow_instagram_practice.member.repository.ProfileImageRepository;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 
 import lombok.RequiredArgsConstructor;
 

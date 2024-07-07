@@ -1,7 +1,7 @@
 package com.cow.cow_instagram_practice.member.controller.dto.request;
 
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

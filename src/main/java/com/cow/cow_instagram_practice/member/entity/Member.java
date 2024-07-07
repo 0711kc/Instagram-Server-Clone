@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cow.cow_instagram_practice.comment.entity.Comment;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.post.entity.Post;
 
 import jakarta.persistence.CascadeType;

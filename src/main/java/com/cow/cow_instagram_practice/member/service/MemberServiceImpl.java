@@ -20,9 +20,9 @@ import com.cow.cow_instagram_practice.member.controller.dto.request.MemberReques
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.member.repository.MemberRepository;
-import com.cow.cow_instagram_practice.member.repository.ProfileImageRepository;
+import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
