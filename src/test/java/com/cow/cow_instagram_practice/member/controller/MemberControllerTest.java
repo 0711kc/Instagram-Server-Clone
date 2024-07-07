@@ -2,6 +2,7 @@ package com.cow.cow_instagram_practice.member.controller;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +50,8 @@ public class MemberControllerTest {
 
 		mockMvc.perform(
 				get("/member/" + memberId))
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andDo(print());
 
 		verify(memberService).findOne(memberId);
 	}
@@ -72,9 +74,9 @@ public class MemberControllerTest {
 		mockMvc.perform(
 				post("/member/new")
 					.content(json)
-					.characterEncoding("utf-8")
 					.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isCreated());
+			.andExpect(status().isCreated())
+			.andDo(print());
 
 		verify(memberService).join(any());
 	}
