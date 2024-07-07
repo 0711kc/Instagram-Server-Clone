@@ -47,7 +47,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 	};
 
 	private final String[] WHITE_LIST_PATCH = {
-		"/member/{memberId}"
+		"/member/{memberId}",
+		"/member/{memberId}/image"
 	};
 
 

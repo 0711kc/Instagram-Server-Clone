@@ -69,4 +69,8 @@ public class Member {
 		this.email = email;
 		this.role = role;
 	}
+
+	public void updateProfileImage(ProfileImage profileImage) {
+		this.profileImage = profileImage;
+	}
 }

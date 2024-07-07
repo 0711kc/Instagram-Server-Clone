@@ -1,22 +1,26 @@
 spring:
   application:
     name: cow_instagram_practice
+  profiles:
+    include: secret
   jpa:
     open-in-view: true
     hibernate:
       ddl-auto: create
+    defer-datasource-initialization: true
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+  sql:
+    init:
+      mode: always
   datasource:
     url: jdbc:mysql://localhost:4321/cow-instagram-container?
     username: myuser
     password: password
-  jwt:
-    secret: "spring.jwt.secret=vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
 
   docker:
     compose:

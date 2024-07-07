@@ -1,5 +1,7 @@
 package com.cow.cow_instagram_practice.member.controller;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,11 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cow.cow_instagram_practice.image.service.ImageService;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
+import com.cow.cow_instagram_practice.member.entity.ProfileImage;
 import com.cow.cow_instagram_practice.member.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberController {
 	private final MemberService memberService;
+	private final ImageService imageService;
 
 	@PostMapping("/new")
 	@Operation(summary = "등록", description = "신규 회원 등록")
@@ -75,5 +82,12 @@ public class MemberController {
 	public ResponseEntity<MemberResponse> update(@PathVariable final String memberId,
 		@RequestBody @Valid UpdateMemberRequest updateMemberRequest) {
 		return memberService.updateById(memberId, updateMemberRequest);
+	}
+
+	@PatchMapping("/{memberId}/image")
+	public ResponseEntity<MemberResponse> updateProfileImage(@PathVariable final String memberId,
+		@RequestParam("image") MultipartFile multipartFile) throws IOException {
+		ProfileImage profileImage = imageService.upload(multipartFile);
+		return memberService.updateImageById(memberId, profileImage);
 	}
 }

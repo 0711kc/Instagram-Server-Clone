@@ -101,6 +101,17 @@ public class MemberServiceImpl implements MemberService {
 			.body(MemberResponse.from(member));
 	}
 
+	@Override
+	public ResponseEntity<MemberResponse> updateImageById(String memberId, ProfileImage profileImage) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
+		member.updateProfileImage(profileImage);
+		memberRepository.save(member);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(MemberResponse.from(member));
+	}
+
 	private static void copyNonNullProperties(Object src, Object target) {
 		BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
 	}

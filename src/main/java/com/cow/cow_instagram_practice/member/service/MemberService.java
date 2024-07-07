@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
+import com.cow.cow_instagram_practice.member.entity.ProfileImage;
 
 public interface MemberService {
 	ResponseEntity<MemberResponse> findOne(String memberId);
@@ -18,4 +19,6 @@ public interface MemberService {
 	ResponseEntity<Void> delete(String memberId);
 
 	ResponseEntity<MemberResponse> updateById(String memberId, UpdateMemberRequest updateMemberRequest);
+
+	ResponseEntity<MemberResponse> updateImageById(String memberId, ProfileImage profileImage);
 }
