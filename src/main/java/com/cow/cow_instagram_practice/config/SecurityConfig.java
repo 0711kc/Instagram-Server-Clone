@@ -26,10 +26,17 @@ public class SecurityConfig implements WebMvcConfigurer {
 		"/login"
 	};
 
+
 	private final String[] WHITE_LIST_GET = {
 		"/member/{memberId}"
 	};
 
+	private final String[] WHITE_LIST_SWAGGER = {
+		"/swagger-ui/**"
+		// "/v3/api-docs/**"
+	};
+
+	// TODO DELETE와 GET은 나중에 지워야됨
 	private final String[] WHITE_LIST_DELETE = {
 		"/member/{memberId}"
 	};
@@ -37,7 +44,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final String[] WHITE_LIST_PATCH = {
 		"/member/{memberId}"
 	};
-
 	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
@@ -70,6 +76,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 				.requestMatchers(HttpMethod.GET, WHITE_LIST_GET).permitAll()
 				.requestMatchers(HttpMethod.DELETE, WHITE_LIST_DELETE).permitAll()
 				.requestMatchers(HttpMethod.PATCH, WHITE_LIST_PATCH).permitAll()
+				.requestMatchers(WHITE_LIST_SWAGGER).permitAll()
 				.anyRequest().authenticated());
 
 		http
