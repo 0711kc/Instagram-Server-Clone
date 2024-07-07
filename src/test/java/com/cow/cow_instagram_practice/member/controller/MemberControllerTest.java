@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
+import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.service.MemberServiceImpl;
 
 @WebMvcTest(MemberController.class)
@@ -83,7 +85,7 @@ public class MemberControllerTest {
 
 	@Test
 	@DisplayName("회원 삭제 테스트")
-	@WithAnonymousUser
+	@WithMockUser
 	void deleteMemberTest() throws Exception {
 		String memberId = "0711kc";
 
@@ -97,5 +99,28 @@ public class MemberControllerTest {
 			.andDo(print());
 
 		verify(memberService).delete(memberId);
+	}
+
+	@Test
+	@DisplayName("회원 수정 테스트")
+	@WithMockUser
+	void updateMemberTest() throws Exception {
+		String memberId = "0711kc";
+
+		UpdateMemberRequest updateMemberRequest = UpdateMemberRequest.builder().name("Lee Chan").build();
+		String json = new ObjectMapper().writeValueAsString(updateMemberRequest);
+
+		given(memberService.updateById(memberId, updateMemberRequest)).willReturn(
+			ResponseEntity.ok().build()
+		);
+
+		mockMvc.perform(
+				patch("/member/" + memberId)
+					.content(json)
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+		verify(memberService).updateById(anyString(), any());
 	}
 }
