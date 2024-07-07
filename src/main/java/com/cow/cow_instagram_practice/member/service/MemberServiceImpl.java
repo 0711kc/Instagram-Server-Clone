@@ -1,8 +1,14 @@
 package com.cow.cow_instagram_practice.member.service;
 
+import java.beans.FeatureDescriptor;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
+import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.member.entity.ProfileImage;
@@ -74,5 +81,39 @@ public class MemberServiceImpl implements MemberService {
 		}
 		memberRepository.deleteById(memberId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@Override
+	public ResponseEntity<MemberResponse> updateById(String memberId, UpdateMemberRequest updateMemberRequest) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
+		UpdateMemberRequest existMember = UpdateMemberRequest.from(member);
+		copyNonNullProperties(updateMemberRequest, existMember);
+		String name = existMember.getName();
+		String nickname = existMember.getNickname();
+		String phone = existMember.getPhone();
+		String email = existMember.getEmail();
+		String role = existMember.getRole().getPermission();
+		member.update(name, nickname, phone, email, role);
+		memberRepository.save(member);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(MemberResponse.from(member));
+	}
+
+	private static void copyNonNullProperties(Object src, Object target) {
+		BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+	}
+
+	private static String[] getNullPropertyNames (Object source) {
+		final BeanWrapper src = new BeanWrapperImpl(source);
+		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+		Set<String> emptyNames = Arrays.stream(pds)
+			.map(FeatureDescriptor::getName)
+			.filter(name -> src.getPropertyValue(name) == null)
+			.collect(Collectors.toSet());
+		String[] result = new String[emptyNames.size()];
+		return emptyNames.toArray(result);
 	}
 }

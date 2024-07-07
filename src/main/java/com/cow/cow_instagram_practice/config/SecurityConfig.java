@@ -34,6 +34,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 		"/member/{memberId}"
 	};
 
+	private final String[] WHITE_LIST_PATCH = {
+		"/member/{memberId}"
+	};
+
 	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
@@ -65,10 +69,12 @@ public class SecurityConfig implements WebMvcConfigurer {
 				.requestMatchers(HttpMethod.POST, WHITE_LIST_POST).permitAll()
 				.requestMatchers(HttpMethod.GET, WHITE_LIST_GET).permitAll()
 				.requestMatchers(HttpMethod.DELETE, WHITE_LIST_DELETE).permitAll()
+				.requestMatchers(HttpMethod.PATCH, WHITE_LIST_PATCH).permitAll()
 				.anyRequest().authenticated());
 
 		http
-			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+				UsernamePasswordAuthenticationFilter.class);
 
 		http
 			.sessionManagement((session) -> session

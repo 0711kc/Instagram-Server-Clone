@@ -61,4 +61,12 @@ public class Member {
 	public void updatePassword(String password) {
 		this.password = password;
 	}
+
+	public void update(String name, String nickname, String phone, String email, String role) {
+		this.name = name;
+		this.nickname = nickname;
+		this.phone = phone;
+		this.email = email;
+		this.role = role;
+	}
 }

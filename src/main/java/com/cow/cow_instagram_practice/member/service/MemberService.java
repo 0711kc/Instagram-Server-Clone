@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
+import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 
 public interface MemberService {
@@ -15,4 +16,6 @@ public interface MemberService {
 	ResponseEntity<List<MemberResponse>> findAll();
 
 	ResponseEntity<Void> delete(String memberId);
+
+	ResponseEntity<MemberResponse> updateById(String memberId, UpdateMemberRequest updateMemberRequest);
 }
