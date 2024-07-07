@@ -80,4 +80,22 @@ public class MemberControllerTest {
 
 		verify(memberService).join(any());
 	}
+
+	@Test
+	@DisplayName("회원 삭제 테스트")
+	@WithAnonymousUser
+	void deleteMemberTest() throws Exception {
+		String memberId = "0711kc";
+
+		given(memberService.delete(memberId)).willReturn(
+			ResponseEntity.noContent().build()
+		);
+
+		mockMvc.perform(
+				delete("/member/" + memberId))
+			.andExpect(status().isNoContent())
+			.andDo(print());
+
+		verify(memberService).delete(memberId);
+	}
 }

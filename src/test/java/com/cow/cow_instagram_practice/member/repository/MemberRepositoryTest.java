@@ -85,6 +85,15 @@ public class MemberRepositoryTest {
 		Assertions.assertThat(member.getProfileImage()).isNotNull();
 	}
 
+	@Test
+	@DisplayName("회원 삭제하기")
+	void deleteMember() {
+		memberRepository.deleteById("test123");
+
+		Optional<Member> findMember = memberRepository.findById("test123");
+		Assertions.assertThat(findMember).isNotPresent();
+	}
+
 	private Member getTestMember(String id, String password, String name, String nickname, String phone, String email,
 		ProfileImage profileImage) {
 		return Member.builder()
