@@ -6,20 +6,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
 import com.cow.cow_instagram_practice.member.service.MemberServiceImpl;
 
 @WebMvcTest(MemberController.class)
+@Import(JWTUtil.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MemberControllerTest {
 	@Autowired
 	MockMvc mockMvc;
@@ -27,8 +34,12 @@ public class MemberControllerTest {
 	@MockBean
 	MemberServiceImpl memberService;
 
+	@Autowired
+	WebApplicationContext context;
+
 	@Test
 	@DisplayName("회원 조회 테스트")
+	@WithAnonymousUser
 	void getMemberTest() throws Exception {
 		String memberId = "0711kc";
 
@@ -45,10 +56,11 @@ public class MemberControllerTest {
 
 	@Test
 	@DisplayName("회원 등록 테스트")
-	void newMemberTest() throws Exception {
+	@WithAnonymousUser
+	void registerMemberTest() throws Exception {
 		String memberId = "0711kc";
 		MemberRequest memberRequest = MemberRequest.builder()
-			.id(memberId).password("1234qwer!").name("Kim Chan").nickname("KC1234")
+			.id(memberId).password("1234qwe!").name("Kim Chan").nickname("KC1234")
 			.phone("010-1234-5678").email("123asd@gmail.com").role(MemberRole.Admin)
 			.build();
 		String json = new ObjectMapper().writeValueAsString(memberRequest);
@@ -60,6 +72,7 @@ public class MemberControllerTest {
 		mockMvc.perform(
 				post("/member/new")
 					.content(json)
+					.characterEncoding("utf-8")
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated());
 
