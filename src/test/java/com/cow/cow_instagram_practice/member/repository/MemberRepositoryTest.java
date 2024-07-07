@@ -11,19 +11,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.member.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class MemberRepositoryTest {
 	@Autowired
 	MemberRepository memberRepository;
-
-	@Autowired
-	ProfileImageRepository profileImageRepository;
-
-	@Autowired
-	FollowRepository followRepository;
 
 	@BeforeEach
 	void setUp() {
@@ -34,10 +28,9 @@ public class MemberRepositoryTest {
 		String phone = "010-1234-5678";
 		String email = "test@gmail.com";
 		String imageLink = "https://mycowpracticebucket.s3.ap-northeast-2.amazonaws.com/anonymous.png";
-		ProfileImage profileImage = getTestProfileImage(imageLink);
+		ProfileImage profileImage = ProfileImage.builder().id(1L).imageLink(imageLink).build();
 		Member member = getTestMember(id, password, name, nickname, phone, email, profileImage);
 
-		profileImageRepository.save(profileImage);
 		memberRepository.save(member);
 	}
 
@@ -51,10 +44,10 @@ public class MemberRepositoryTest {
 		String phone = "010-9876-5432";
 		String email = "123qwe@gmail.com";
 		String imageLink = "https://mycowpracticebucket.s3.ap-northeast-2.amazonaws.com/anonymous.png";
-		ProfileImage profileImage = getTestProfileImage(imageLink);
+		ProfileImage profileImage = ProfileImage.builder().id(1L).imageLink(imageLink).build();
 		Member member = getTestMember(id, password, name, nickname, phone, email, profileImage);
 
-		profileImageRepository.save(profileImage);
+		// profileImageRepository.save(profileImage);
 		Member savedMember = memberRepository.save(member);
 
 		Assertions.assertThat(savedMember.getId()).isEqualTo(id);
@@ -105,9 +98,5 @@ public class MemberRepositoryTest {
 			.email(email)
 			.profileImage(profileImage)
 			.build();
-	}
-
-	private ProfileImage getTestProfileImage(String imageLink) {
-		return ProfileImage.from(imageLink);
 	}
 }
