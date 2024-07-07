@@ -15,6 +15,4 @@ public interface MemberService {
 	ResponseEntity<List<MemberResponse>> findAll();
 
 	ResponseEntity<Void> delete(String memberId);
-
-	// ResponseEntity<MemberResponse> updateById(Long memberId, UpdateMemberRequest updateMemberRequest);
 }

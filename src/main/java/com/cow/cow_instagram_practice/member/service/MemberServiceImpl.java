@@ -1,6 +1,7 @@
 package com.cow.cow_instagram_practice.member.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,11 +57,22 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(readOnly = true)
 	@Override
 	public ResponseEntity<List<MemberResponse>> findAll() {
-		return null;
+		List<Member> members = memberRepository.findAll();
+		List<MemberResponse> memberResponses = members.stream()
+			.map(MemberResponse::from)
+			.collect(Collectors.toList());
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(memberResponses);
 	}
 
 	@Override
 	public ResponseEntity<Void> delete(String memberId) {
-		return null;
+		boolean isExistMember = memberRepository.existsById(memberId);
+		if (!isExistMember) {
+			throw new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다.");
+		}
+		memberRepository.deleteById(memberId);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

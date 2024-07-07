@@ -1,6 +1,7 @@
 package com.cow.cow_instagram_practice.member.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,17 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/new")
-	public ResponseEntity<MemberResponse> create(@Valid @RequestBody MemberRequest memberRequest) {
+	public ResponseEntity<MemberResponse> create(@Valid @RequestBody final MemberRequest memberRequest) {
 		return memberService.join(memberRequest);
 	}
 
 	@GetMapping("/{memberId}")
 	public ResponseEntity<MemberResponse> findMember(@PathVariable final String memberId) {
 		return memberService.findOne(memberId);
+	}
+
+	@DeleteMapping("/{memberId}")
+	public ResponseEntity<Void> delete(@PathVariable final String memberId) {
+		return memberService.delete(memberId);
 	}
 }

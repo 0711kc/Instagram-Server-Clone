@@ -26,6 +26,14 @@ public class SecurityConfig implements WebMvcConfigurer {
 		"/login"
 	};
 
+	private final String[] WHITE_LIST_GET = {
+		"/member/{memberId}"
+	};
+
+	private final String[] WHITE_LIST_DELETE = {
+		"/member/{memberId}"
+	};
+
 	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
@@ -55,7 +63,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 		http
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.POST, WHITE_LIST_POST).permitAll()
-				.requestMatchers(HttpMethod.GET, "/", "/**", "/member/{memberId}").permitAll()
+				.requestMatchers(HttpMethod.GET, WHITE_LIST_GET).permitAll()
+				.requestMatchers(HttpMethod.DELETE, WHITE_LIST_DELETE).permitAll()
 				.anyRequest().authenticated());
 
 		http
