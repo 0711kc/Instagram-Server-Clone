@@ -25,17 +25,19 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-		throws AuthenticationException {
+			throws AuthenticationException {
 		String username = obtainUsername(request);
 		String password = obtainPassword(request);
 
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+		UsernamePasswordAuthenticationToken authToken =
+			new UsernamePasswordAuthenticationToken(username, password, null);
 
 		return authenticationManager.authenticate(authToken);
 	}
 
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
+	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			FilterChain chain, Authentication authentication) {
 		CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
 		String username = customUserDetails.getUsername();
@@ -52,7 +54,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 	}
 
 	@Override
-	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) {
 		response.setStatus(401);
 	}
 }
