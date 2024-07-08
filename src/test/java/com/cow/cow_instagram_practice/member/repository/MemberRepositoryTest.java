@@ -47,7 +47,6 @@ public class MemberRepositoryTest {
 		ProfileImage profileImage = ProfileImage.builder().id(1L).imageLink(imageLink).build();
 		Member member = getTestMember(id, password, name, nickname, phone, email, profileImage);
 
-		// profileImageRepository.save(profileImage);
 		Member savedMember = memberRepository.save(member);
 
 		Assertions.assertThat(savedMember.getId()).isEqualTo(id);

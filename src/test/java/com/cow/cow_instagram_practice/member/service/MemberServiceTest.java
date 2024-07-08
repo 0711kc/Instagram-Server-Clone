@@ -3,6 +3,8 @@ package com.cow.cow_instagram_practice.member.service;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -40,8 +42,7 @@ public class MemberServiceTest {
 	@Mock
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	private void setUpMember() {
-		String id = "test123";
+	private Member setUpMember(String id) {
 		String password = "1234qwe!";
 		String name = "Test";
 		String nickname = "test123";
@@ -50,22 +51,40 @@ public class MemberServiceTest {
 		MemberRole memberRole = MemberRole.Admin;
 		String imageLink = "https://mycowpracticebucket.s3.ap-northeast-2.amazonaws.com/anonymous.png";
 		ProfileImage profileImage = ProfileImage.builder().id(1L).imageLink(imageLink).build();
-		Member member = Member.builder().id(id).password(password).name(name).nickname(nickname)
-			.phone(phone).email(email).profileImage(profileImage).role(memberRole.getPermission()).build();
-		given(memberRepository.findById(id)).willReturn(Optional.of(member));
+		return Member.builder().id(id).password(password).name(name).nickname(nickname).phone(phone)
+			.email(email).profileImage(profileImage).role(memberRole.getPermission()).build();
 	}
 
 	@Test
 	@DisplayName("회원 불러오기")
 	public void getMember() {
-		setUpMember();
 		String memberId = "test123";
+		Member member = setUpMember(memberId);
+		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 		ResponseEntity<MemberResponse> memberResponseEntity = memberService.findOne(memberId);
 
 		HttpStatusCode status = memberResponseEntity.getStatusCode();
 		MemberResponse memberResponse = memberResponseEntity.getBody();
 		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
 		checkMember(memberResponse);
+	}
+
+	@Test
+	@DisplayName("회원 전체 불러오기")
+	public void getAllMember() {
+		Member member1 = setUpMember("test123");
+		Member member2 = setUpMember("0711kc");
+		List<Member> members = Arrays.asList(member1, member2);
+		given(memberRepository.findAll()).willReturn(members);
+		ResponseEntity<List<MemberResponse>> memberResponseEntity = memberService.findAll();
+
+		HttpStatusCode status = memberResponseEntity.getStatusCode();
+		List<MemberResponse> memberResponses = memberResponseEntity.getBody();
+		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(memberResponses).isNotNull();
+		Assertions.assertThat(memberResponses.size()).isEqualTo(2);
+		checkMember(memberResponses.get(0), member1);
+		checkMember(memberResponses.get(1), member2);
 	}
 
 	@Test
@@ -109,8 +128,9 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("회원 수정")
 	public void updateMember() {
-		setUpMember();
 		String memberId = "test123";
+		Member member = setUpMember(memberId);
+		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 		UpdateMemberRequest updateMemberRequest = UpdateMemberRequest.builder()
 				.name("Lee Chan").phone("010-9876-5432").build();
 
@@ -123,11 +143,31 @@ public class MemberServiceTest {
 		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(beforeMemberResponse).isNotNull();
 		Assertions.assertThat(afterMemberResponse).isNotNull();
-
 		Assertions.assertThat(beforeMemberResponse.getName()).isNotEqualTo(afterMemberResponse.getName());
 		Assertions.assertThat(beforeMemberResponse.getPhone()).isNotEqualTo(afterMemberResponse.getPhone());
 		Assertions.assertThat(beforeMemberResponse.getNickname()).isEqualTo(afterMemberResponse.getNickname());
 		Assertions.assertThat(beforeMemberResponse.getEmail()).isEqualTo(afterMemberResponse.getEmail());
+	}
+
+	@Test
+	@DisplayName("회원 프로필 이미지 수정")
+	public void updateImageMember() {
+		String memberId = "test123";
+		Member member = setUpMember(memberId);
+		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+		ProfileImage profileImage = ProfileImage.builder().id(2L).imageLink("testLink").build();
+
+		ResponseEntity<MemberResponse> beforeResponseEntity = memberService.findOne(memberId);
+		ResponseEntity<MemberResponse> afterResponseEntity = memberService.updateImageById(memberId, profileImage);
+
+		HttpStatusCode status = afterResponseEntity.getStatusCode();
+		MemberResponse beforeMemberResponse = beforeResponseEntity.getBody();
+		MemberResponse afterMemberResponse = afterResponseEntity.getBody();
+		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(beforeMemberResponse).isNotNull();
+		Assertions.assertThat(afterMemberResponse).isNotNull();
+		Assertions.assertThat(beforeMemberResponse.getImage()).isNotEqualTo(afterMemberResponse.getImage());
+		Assertions.assertThat(beforeMemberResponse.getNickname()).isEqualTo(afterMemberResponse.getNickname());
 	}
 
 	private void checkMember(MemberResponse memberResponse) {
