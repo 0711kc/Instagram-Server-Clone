@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class MemberControllerAdvice {
@@ -29,7 +28,7 @@ public class MemberControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("[Error] 잘못된 요청입니다.");
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -42,11 +41,5 @@ public class MemberControllerAdvice {
 	@ExceptionHandler(IOException.class)
 	public ResponseEntity<String> handleIOException(IOException exception) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
-	}
-
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException exception) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
 	}
 }
