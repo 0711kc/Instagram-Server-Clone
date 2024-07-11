@@ -22,15 +22,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Make application.properties
+    - name: Make application-secret.properties
       run: |
         cd ./src/main/resources
         touch ./application-secret.properties
         echo "${{secrets.JWT_SECRET}}" >> ./application-secret.properties
-        echo "${{secrets.S3_CREDENTIALS_ACCESS_KEY}}" >> .env.production
-        echo "${{secrets.S3_CREDENTIALS_SECRET_KEY}}" >> .env.production
-        echo "${{secrets.S3_CREDENTIALS_REGION}}" >> .env.production
-        echo "${{secrets.S3_BUCKET}}" >> .env.production
+        echo "${{secrets.S3_CREDENTIALS_ACCESS_KEY}}" >> ./application-secret.properties
+        echo "${{secrets.S3_CREDENTIALS_SECRET_KEY}}" >> ./application-secret.properties
+        echo "${{secrets.S3_CREDENTIALS_REGION}}" >> ./application-secret.properties
+        echo "${{secrets.S3_BUCKET}}" >> ./application-secret.properties
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
