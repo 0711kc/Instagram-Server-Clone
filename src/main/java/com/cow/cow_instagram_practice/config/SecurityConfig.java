@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.cow.cow_instagram_practice.jwt.JWTFilter;
 import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.jwt.LoginFilter;
 
@@ -81,6 +82,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 				.requestMatchers(HttpMethod.PATCH, WHITE_LIST_PATCH).permitAll()
 				.requestMatchers(WHITE_LIST_SWAGGER).permitAll()
 				.anyRequest().authenticated());
+
+		http
+			.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
 		http
 			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),

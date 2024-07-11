@@ -8,19 +8,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.cow.cow_instagram_practice.member.entity.Member;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomUserDetails implements UserDetails {
 	private final Member member;
 
-	public CustomUserDetails(Member member) {
-		this.member = member;
+	public static CustomUserDetails from(Member member) {
+		return new CustomUserDetails(member);
 	}
-
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> collection = new ArrayList<>();
 		collection.add(new GrantedAuthority() {
-
 			@Override
 			public String getAuthority() {
 				return member.getRole();
