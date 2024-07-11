@@ -24,17 +24,17 @@ jobs:
 
     - name: access to secrets
       run: |
-        echo "jwt.secret=$jwt.secret" >> .env
-        echo "s3.credentials.access-key=$s3.credentials.access-key" >> .env
-        echo "s3.credentials.secret-key=$s3.credentials.secret-key" >> .env
-        echo "s3.credentials.region=$s3.credentials.region" >> .env
-        echo "s3.bucket=$s3.bucket" >> .env
+        echo "jwt.secret=$jwt_secret" >> .env.production
+        echo "s3.credentials.access-key=$s3_credentials_access-key" >> .env.production
+        echo "s3.credentials.secret-key=$s3_credentials_secret-key" >> .env.production
+        echo "s3.credentials.region=$s3_credentials_region" >> .env.production
+        echo "s3.bucket=$s3_bucket" >> .env.production
       env:
-        jwt.secret: ${{secrets.JWT_SECRET}}
-        s3.credentials.access-key: ${{secrets.S3_CREDENTIALS_ACCESS_KEY}}
-        s3.credentials.secret-key: ${{secrets.S3_CREDENTIALS_SECRET_KEY}}
-        s3.credentials.region: ${{secrets.S3_CREDENTIALS_REGION}}
-        s3.bucket: ${{secrets.S3_BUCKET}}
+        jwt_secret: ${{secrets.JWT_SECRET}}
+        s3_credentials_access-key: ${{secrets.S3_CREDENTIALS_ACCESS_KEY}}
+        s3_credentials_secret-key: ${{secrets.S3_CREDENTIALS_SECRET_KEY}}
+        s3_credentials_region: ${{secrets.S3_CREDENTIALS_REGION}}
+        s3_bucket: ${{secrets.S3_BUCKET}}
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
