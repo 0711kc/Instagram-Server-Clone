@@ -63,12 +63,11 @@ public class Member {
 		this.password = password;
 	}
 
-	public void update(String name, String nickname, String phone, String email, String role) {
+	public void update(String name, String nickname, String phone, String email) {
 		this.name = name;
 		this.nickname = nickname;
 		this.phone = phone;
 		this.email = email;
-		this.role = role;
 	}
 
 	public void updateProfileImage(ProfileImage profileImage) {

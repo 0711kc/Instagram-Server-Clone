@@ -37,9 +37,6 @@ public class UpdateMemberRequest {
 	@Schema(description = "이메일")
 	private String email;
 
-	@Schema(description = "역할")
-	private MemberRole role;
-
 	public static UpdateMemberRequest from(Member member) {
 		return UpdateMemberRequest.builder()
 			.password(member.getPassword())
@@ -47,7 +44,6 @@ public class UpdateMemberRequest {
 			.nickname(member.getNickname())
 			.phone(member.getPhone())
 			.email(member.getEmail())
-			.role(MemberRole.findByPermission(member.getRole()))
 			.build();
 	}
 }

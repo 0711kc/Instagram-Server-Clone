@@ -93,8 +93,7 @@ public class MemberServiceImpl implements MemberService {
 		String nickname = existMember.getNickname();
 		String phone = existMember.getPhone();
 		String email = existMember.getEmail();
-		String role = existMember.getRole().getPermission();
-		member.update(name, nickname, phone, email, role);
+		member.update(name, nickname, phone, email);
 		memberRepository.save(member);
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
