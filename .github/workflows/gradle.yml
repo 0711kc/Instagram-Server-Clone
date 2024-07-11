@@ -19,6 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      jwt.secret: ${{ secrets.JWT_SECRET }}
+      s3.credentials.access_key: ${{ secrets.S3_CREDENTIALS_ACCESS_KEY }}
+      s3.credentials.secret_key: ${{ secrets.S3_CREDENTIALS_SECRET_KEY }}
+      s3.credentials.bucket: ${{ secrets.S3_CREDENTIALS_BUCKET }}
 
     steps:
     - uses: actions/checkout@v4
@@ -28,7 +33,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup MySQㅣ
+    - name: Setup MySQL
       uses: samin/mysql-action@v1
       with:
         character set server: 'utf8'
