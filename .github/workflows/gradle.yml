@@ -24,7 +24,7 @@ jobs:
       s3.credentials.access_key: ${{ secrets.S3_CREDENTIALS_ACCESS_KEY }}
       s3.credentials.secret_key: ${{ secrets.S3_CREDENTIALS_SECRET_KEY }}
       s3.credentials.region: ${{ secrets.S3_CREDENTIALS_REGION }}
-      s3.bucket: ${{ secrets.S3_CREDENTIALS_BUCKET }}
+      s3.bucket: ${{ secrets.S3_BUCKET }}
 
     steps:
     - uses: actions/checkout@v4
