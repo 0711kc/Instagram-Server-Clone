@@ -22,19 +22,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: access to secrets
+    - name: Make application.properties
       run: |
-        echo "jwt.secret=$jwt_secret" >> .env.production
-        echo "s3.credentials.access-key=$s3_credentials_access-key" >> .env.production
-        echo "s3.credentials.secret-key=$s3_credentials_secret-key" >> .env.production
-        echo "s3.credentials.region=$s3_credentials_region" >> .env.production
-        echo "s3.bucket=$s3_bucket" >> .env.production
-      env:
-        jwt_secret: ${{secrets.JWT_SECRET}}
-        s3_credentials_access-key: ${{secrets.S3_CREDENTIALS_ACCESS_KEY}}
-        s3_credentials_secret-key: ${{secrets.S3_CREDENTIALS_SECRET_KEY}}
-        s3_credentials_region: ${{secrets.S3_CREDENTIALS_REGION}}
-        s3_bucket: ${{secrets.S3_BUCKET}}
+        cd ./src/main/resources
+        touch ./application-secret.properties
+        echo "${{secrets.JWT_SECRET}}" >> ./application-secret.properties
+        echo "${{secrets.S3_CREDENTIALS_ACCESS_KEY}}" >> .env.production
+        echo "${{secrets.S3_CREDENTIALS_SECRET_KEY}}" >> .env.production
+        echo "${{secrets.S3_CREDENTIALS_REGION}}" >> .env.production
+        echo "${{secrets.S3_BUCKET}}" >> .env.production
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
