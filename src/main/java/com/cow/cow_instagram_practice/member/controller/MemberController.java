@@ -85,6 +85,13 @@ public class MemberController {
 	}
 
 	@PatchMapping("/{memberId}/image")
+	@Operation(summary = "수정", description = "기존 회원 프로필 이미지 수정")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "수정 성공",
+			content = {@Content(schema = @Schema(implementation = MemberResponse.class))}),
+		@ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
+			content = {@Content(schema = @Schema(hidden = true))})
+	})
 	public ResponseEntity<MemberResponse> updateProfileImage(@PathVariable final String memberId,
 		@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		ProfileImage profileImage = imageService.upload(multipartFile);
