@@ -24,11 +24,11 @@ jobs:
 
     - name: access to secrets
       run: |
-        echo "jwt.secret=$JWT_SECRET" >> .env
-        echo "s3.credentials.access-key=$S3_CREDENTIALS_ACCESS_KEY" >> .env
-        echo "s3.credentials.secret-key=$S3_CREDENTIALS_SECRET_KEY" >> .env
-        echo "s3.credentials.region=$S3_CREDENTIALS_REGION" >> .env
-        echo "s3.bucket=$S3_BUCKET" >> .env
+        echo "jwt.secret=$jwt.secret" >> .env
+        echo "s3.credentials.access-key=$s3.credentials.access-key" >> .env
+        echo "s3.credentials.secret-key=$s3.credentials.secret-key" >> .env
+        echo "s3.credentials.region=$s3.credentials.region" >> .env
+        echo "s3.bucket=$s3.bucket" >> .env
       env:
         jwt.secret: ${{secrets.JWT_SECRET}}
         s3.credentials.access-key: ${{secrets.S3_CREDENTIALS_ACCESS_KEY}}
