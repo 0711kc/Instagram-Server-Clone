@@ -1,7 +1,10 @@
 package com.cow.cow_instagram_practice.member.controller.dto.response;
 
+import java.util.List;
+
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
 import com.cow.cow_instagram_practice.member.entity.Member;
+import com.cow.cow_instagram_practice.post.controller.dto.response.PostInfo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -32,6 +35,9 @@ public class MemberResponse {
 	@Schema(description = "권한")
 	private final String role;
 
+	@Schema(description = "작성한 게시글 리스트")
+	private final List<PostInfo> postInfos;
+
 	public static MemberResponse from(Member member) {
 		return MemberResponse.builder()
 			.id(member.getId())
@@ -40,7 +46,10 @@ public class MemberResponse {
 			.phone(member.getPhone())
 			.email(member.getEmail())
 			.image(member.getProfileImage().getImageLink())
-			.role(MemberRole.findByPermission(member.getRole()).getPermission())
+			.role(
+				MemberRole.findByPermission(member.getRole()).getPermission())
+			.postInfos(
+				member.getPosts().stream().map(PostInfo::from).toList())
 			.build();
 	}
 }

@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 public class PostResponse {
 	private final Long id;
 	private final String content;
+	private final String memberId;
 	private final String memberName;
+	private final String imageLink;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private final LocalDateTime date;
@@ -24,7 +26,9 @@ public class PostResponse {
 		return PostResponse.builder()
 			.id(post.getId())
 			.content(post.getContent())
+			.memberId(post.getMember().getId())
 			.memberName(post.getMember().getName())
+			.imageLink(post.getPostImage().getImageLink())
 			.date(post.getDate())
 			.build();
 	}

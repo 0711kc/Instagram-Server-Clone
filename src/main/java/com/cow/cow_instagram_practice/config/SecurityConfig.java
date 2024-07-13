@@ -49,7 +49,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	private final String[] TEMP_WHITE_LIST_GET = {
 		"/post/{postId}",
-		"/post/{memberId}",
+		"/post/all/{memberId}",
 		"/post/all"
 	};
 

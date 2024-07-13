@@ -44,7 +44,7 @@ public class PostController {
 		return postService.findOne(postId);
 	}
 
-	@GetMapping("/{memberId}")
+	@GetMapping("/all/{memberId}")
 	public ResponseEntity<List<PostResponse>> findAllByMember(@PathVariable String memberId) {
 		Member member = memberService.findOne(memberId);
 		return postService.findAllByMember(member);
