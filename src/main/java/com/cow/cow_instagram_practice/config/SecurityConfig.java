@@ -29,7 +29,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	private final String[] WHITE_LIST_POST = {
 		"/member/new",
-		"/login"
+		"/login",
 	};
 
 
@@ -42,12 +42,22 @@ public class SecurityConfig implements WebMvcConfigurer {
 		"/v3/api-docs/**"
 	};
 
-	// TODO DELETE와 GET은 나중에 지워야됨
-	private final String[] WHITE_LIST_DELETE = {
+	// TODO TEMP - 나중에 지워야되는 화이트리스트 API
+	private final String[] TEMP_WHITE_LIST_POST = {
+		"/post/new/{memberId}"
+	};
+
+	private final String[] TEMP_WHITE_LIST_GET = {
+		"/post/{postId}",
+		"/post/{memberId}",
+		"/post/all"
+	};
+
+	private final String[] TEMP_WHITE_LIST_DELETE = {
 		"/member/{memberId}"
 	};
 
-	private final String[] WHITE_LIST_PATCH = {
+	private final String[] TEMP_WHITE_LIST_PATCH = {
 		"/member/{memberId}",
 		"/member/{memberId}/image"
 	};
@@ -78,8 +88,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.POST, WHITE_LIST_POST).permitAll()
 				.requestMatchers(HttpMethod.GET, WHITE_LIST_GET).permitAll()
-				.requestMatchers(HttpMethod.DELETE, WHITE_LIST_DELETE).permitAll()
-				.requestMatchers(HttpMethod.PATCH, WHITE_LIST_PATCH).permitAll()
+				.requestMatchers(HttpMethod.POST, TEMP_WHITE_LIST_POST).permitAll()
+				.requestMatchers(HttpMethod.GET, TEMP_WHITE_LIST_GET).permitAll()
+				.requestMatchers(HttpMethod.DELETE, TEMP_WHITE_LIST_DELETE).permitAll()
+				.requestMatchers(HttpMethod.PATCH, TEMP_WHITE_LIST_PATCH).permitAll()
 				.requestMatchers(WHITE_LIST_SWAGGER).permitAll()
 				.anyRequest().authenticated());
 

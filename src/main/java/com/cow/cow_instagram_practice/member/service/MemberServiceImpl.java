@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
 		if (isExistMember) {
 			throw new IllegalArgumentException("[Error] 이미 존재하는 아이디입니다.");
 		}
-		ProfileImage defaultImage = profileImageRepository.findById(1L)
+		ProfileImage defaultImage = profileImageRepository.findById(ProfileImageRepository.DEFAULT_PROFILE_ID)
 			.orElseThrow(() -> new IllegalStateException("[Error] 기본 프로필 이미지에 접근할 수 없습니다."));
 		Member member = memberRequest.toEntity(defaultImage);
 		member.updatePassword(bCryptPasswordEncoder.encode(memberRequest.getPassword()));
@@ -53,12 +53,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public ResponseEntity<MemberResponse> findOne(String memberId) {
-		Member member = memberRepository.findById(memberId)
+	public Member findOne(String memberId) {
+		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
-		return ResponseEntity.status(HttpStatus.OK)
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(MemberResponse.from(member));
 	}
 
 	@Transactional(readOnly = true)

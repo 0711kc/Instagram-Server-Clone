@@ -1,10 +1,8 @@
 package com.cow.cow_instagram_practice.post.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.cow.cow_instagram_practice.comment.entity.Comment;
+import com.cow.cow_instagram_practice.image.entity.PostImage;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -16,7 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,24 +39,19 @@ public class Post {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime date = LocalDateTime.now();
 
-	@Size(max = 150)
-	private String image;
+	@OneToOne(fetch = FetchType.LAZY)
+	private PostImage postImage;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
-	@Builder.Default
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-	private final List<Comment> comment = new ArrayList<>();
-
-	public static Post of(final Long id, final String content, final LocalDateTime date, final String image,
+	public static Post of(final String content, final LocalDateTime date, final PostImage postImage,
 		final Member member) {
 		return Post.builder()
-			.id(id)
 			.content(content)
 			.date(date)
-			.image(image)
+			.postImage(postImage)
 			.member(member)
 			.build();
 	}

@@ -2,6 +2,8 @@ package com.cow.cow_instagram_practice.member.controller;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +58,9 @@ public class MemberController {
 			content = {@Content(schema = @Schema(hidden = true))})
 	})
 	public ResponseEntity<MemberResponse> findMember(@PathVariable final String memberId) {
-		return memberService.findOne(memberId);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(MemberResponse.from(memberService.findOne(memberId)));
 	}
 
 	@DeleteMapping("/{memberId}")
@@ -94,7 +98,7 @@ public class MemberController {
 	})
 	public ResponseEntity<MemberResponse> updateProfileImage(@PathVariable final String memberId,
 		@RequestParam("image") MultipartFile multipartFile) throws IOException {
-		ProfileImage profileImage = imageService.upload(multipartFile);
+		ProfileImage profileImage = imageService.uploadProfileImage(multipartFile);
 		return memberService.updateImageById(memberId, profileImage);
 	}
 }

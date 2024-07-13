@@ -61,12 +61,9 @@ public class MemberServiceTest {
 		String memberId = "test123";
 		Member member = setUpMember(memberId);
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
-		ResponseEntity<MemberResponse> memberResponseEntity = memberService.findOne(memberId);
+		Member findMember = memberService.findOne(memberId);
 
-		HttpStatusCode status = memberResponseEntity.getStatusCode();
-		MemberResponse memberResponse = memberResponseEntity.getBody();
-		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
-		checkMember(memberResponse);
+		checkMember(findMember);
 	}
 
 	@Test
@@ -134,11 +131,10 @@ public class MemberServiceTest {
 		UpdateMemberRequest updateMemberRequest = UpdateMemberRequest.builder()
 				.name("Lee Chan").phone("010-9876-5432").build();
 
-		ResponseEntity<MemberResponse> beforeResponseEntity = memberService.findOne(memberId);
+		MemberResponse beforeMemberResponse = MemberResponse.from(memberService.findOne(memberId));
 		ResponseEntity<MemberResponse> afterResponseEntity = memberService.updateById(memberId, updateMemberRequest);
 
 		HttpStatusCode status = afterResponseEntity.getStatusCode();
-		MemberResponse beforeMemberResponse = beforeResponseEntity.getBody();
 		MemberResponse afterMemberResponse = afterResponseEntity.getBody();
 		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(beforeMemberResponse).isNotNull();
@@ -157,11 +153,10 @@ public class MemberServiceTest {
 		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
 		ProfileImage profileImage = ProfileImage.builder().id(2L).imageLink("testLink").build();
 
-		ResponseEntity<MemberResponse> beforeResponseEntity = memberService.findOne(memberId);
+		MemberResponse beforeMemberResponse = MemberResponse.from(memberService.findOne(memberId));
 		ResponseEntity<MemberResponse> afterResponseEntity = memberService.updateImageById(memberId, profileImage);
 
 		HttpStatusCode status = afterResponseEntity.getStatusCode();
-		MemberResponse beforeMemberResponse = beforeResponseEntity.getBody();
 		MemberResponse afterMemberResponse = afterResponseEntity.getBody();
 		Assertions.assertThat(status).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(beforeMemberResponse).isNotNull();
@@ -170,16 +165,16 @@ public class MemberServiceTest {
 		Assertions.assertThat(beforeMemberResponse.getNickname()).isEqualTo(afterMemberResponse.getNickname());
 	}
 
-	private void checkMember(MemberResponse memberResponse) {
-		Assertions.assertThat(memberResponse).isNotNull();
-		Assertions.assertThat(memberResponse.getId()).isEqualTo("test123");
-		Assertions.assertThat(memberResponse.getName()).isEqualTo("Test");
-		Assertions.assertThat(memberResponse.getNickname()).isEqualTo("test123");
-		Assertions.assertThat(memberResponse.getPhone()).isEqualTo("010-1234-5678");
-		Assertions.assertThat(memberResponse.getEmail()).isEqualTo("test@gmail.com");
-		Assertions.assertThat(memberResponse.getImage())
+	private void checkMember(Member member) {
+		Assertions.assertThat(member).isNotNull();
+		Assertions.assertThat(member.getId()).isEqualTo("test123");
+		Assertions.assertThat(member.getName()).isEqualTo("Test");
+		Assertions.assertThat(member.getNickname()).isEqualTo("test123");
+		Assertions.assertThat(member.getPhone()).isEqualTo("010-1234-5678");
+		Assertions.assertThat(member.getEmail()).isEqualTo("test@gmail.com");
+		Assertions.assertThat(member.getProfileImage().getImageLink())
 			.isEqualTo("https://mycowpracticebucket.s3.ap-northeast-2.amazonaws.com/anonymous.png");
-		Assertions.assertThat(memberResponse.getRole()).isEqualTo("ROLE_ADMIN");
+		Assertions.assertThat(member.getRole()).isEqualTo("ROLE_ADMIN");
 	}
 
 	private void checkMember(MemberResponse memberResponse, Member member) {

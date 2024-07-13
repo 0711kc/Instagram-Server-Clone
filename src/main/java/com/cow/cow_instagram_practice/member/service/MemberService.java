@@ -8,9 +8,10 @@ import com.cow.cow_instagram_practice.member.controller.dto.request.MemberReques
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.image.entity.ProfileImage;
+import com.cow.cow_instagram_practice.member.entity.Member;
 
 public interface MemberService {
-	ResponseEntity<MemberResponse> findOne(String memberId);
+	Member findOne(String memberId);
 
 	ResponseEntity<MemberResponse> join(MemberRequest memberRequest);
 

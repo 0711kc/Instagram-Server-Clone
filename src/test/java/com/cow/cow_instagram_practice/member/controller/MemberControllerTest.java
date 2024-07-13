@@ -29,6 +29,7 @@ import com.cow.cow_instagram_practice.member.controller.dto.request.MemberReques
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.image.entity.ProfileImage;
+import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.member.service.MemberServiceImpl;
 
 @WebMvcTest(MemberController.class)
@@ -54,7 +55,7 @@ public class MemberControllerTest {
 		String memberId = "0711kc";
 
 		given(memberService.findOne(memberId)).willReturn(
-			ResponseEntity.ok().build()
+			Member.builder().build()
 		);
 
 		mockMvc.perform(
@@ -143,7 +144,7 @@ public class MemberControllerTest {
 			"profile".getBytes()
 		);
 		ProfileImage profileImage = ProfileImage.builder().id(2L).imageLink("profile.png").build();
-		given(imageService.upload(imageFile)).willReturn(profileImage);
+		given(imageService.uploadProfileImage(imageFile)).willReturn(profileImage);
 		given(memberService.updateImageById(memberId, profileImage)).willReturn(
 			ResponseEntity.ok().build()
 		);

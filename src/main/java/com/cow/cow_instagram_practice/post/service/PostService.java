@@ -1,0 +1,20 @@
+package com.cow.cow_instagram_practice.post.service;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+
+import com.cow.cow_instagram_practice.image.entity.PostImage;
+import com.cow.cow_instagram_practice.member.entity.Member;
+import com.cow.cow_instagram_practice.post.controller.dto.request.PostRequest;
+import com.cow.cow_instagram_practice.post.controller.dto.response.PostResponse;
+
+public interface PostService {
+	ResponseEntity<PostResponse> create(Member member, PostRequest postRequest, PostImage postImage);
+
+	ResponseEntity<PostResponse> findOne(Long postId);
+
+	ResponseEntity<List<PostResponse>> findAll();
+
+	ResponseEntity<List<PostResponse>> findAllByMember(Member member);
+}

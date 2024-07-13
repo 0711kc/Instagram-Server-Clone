@@ -152,7 +152,7 @@ public class MemberAdviceTest {
 			MediaType.IMAGE_PNG_VALUE,
 			"profile".getBytes()
 		);
-		given(imageService.upload(imageFile)).willThrow(new IOException());
+		given(imageService.uploadProfileImage(imageFile)).willThrow(new IOException());
 
 		mockMvc.perform(
 				multipart(HttpMethod.PATCH, "/member/" + memberId + "/image")
@@ -160,7 +160,7 @@ public class MemberAdviceTest {
 			.andExpect(status().isInternalServerError())
 			.andDo(print());
 
-		verify(imageService).upload(imageFile);
+		verify(imageService).uploadProfileImage(imageFile);
 	}
 
 	private Class<? extends Exception> getApiResultExceptionClass(MvcResult result) {

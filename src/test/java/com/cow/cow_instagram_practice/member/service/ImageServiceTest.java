@@ -48,7 +48,7 @@ public class ImageServiceTest {
 		given(profileImageRepository.save(any()))
 			.willReturn(profileImage);
 
-		ProfileImage savedProfileImage = imageService.upload(imageFile);
+		ProfileImage savedProfileImage = imageService.uploadProfileImage(imageFile);
 
 		Assertions.assertThat(savedProfileImage.getImageLink()).isEqualTo(imageLink);
 	}
