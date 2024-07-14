@@ -54,12 +54,15 @@ public class SecurityConfig implements WebMvcConfigurer {
 	};
 
 	private final String[] TEMP_WHITE_LIST_DELETE = {
-		"/member/{memberId}"
+		"/member/{memberId}",
+		"/post/{postId}"
 	};
 
 	private final String[] TEMP_WHITE_LIST_PATCH = {
 		"/member/{memberId}",
-		"/member/{memberId}/image"
+		"/member/{memberId}/image",
+		"/post/{postId}",
+		"/post/{postId}/image"
 	};
 
 

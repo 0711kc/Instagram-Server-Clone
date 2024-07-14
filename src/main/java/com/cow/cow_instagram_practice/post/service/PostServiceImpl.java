@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cow.cow_instagram_practice.image.entity.PostImage;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.post.controller.dto.request.PostRequest;
+import com.cow.cow_instagram_practice.post.controller.dto.request.UpdatePostRequest;
 import com.cow.cow_instagram_practice.post.controller.dto.response.PostResponse;
 import com.cow.cow_instagram_practice.post.entity.Post;
 import com.cow.cow_instagram_practice.post.repository.PostRepository;
@@ -61,5 +62,37 @@ public class PostServiceImpl implements PostService {
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
 			.body(responses);
+	}
+
+	@Override
+	public ResponseEntity<PostResponse> update(Long postId, UpdatePostRequest updatePostRequest) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
+		post.updateContent(updatePostRequest.getContent());
+		postRepository.save(post);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(PostResponse.from(post));
+	}
+
+	@Override
+	public ResponseEntity<PostResponse> update(Long postId, PostImage postImage) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
+		post.updatePostImage(postImage);
+		postRepository.save(post);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(PostResponse.from(post));
+	}
+
+	@Override
+	public ResponseEntity<Void> delete(Long postId) {
+		boolean isExistPost = postRepository.existsById(postId);
+		if (!isExistPost) {
+			throw new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다.");
+		}
+		postRepository.deleteById(postId);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

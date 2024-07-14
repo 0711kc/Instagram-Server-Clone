@@ -55,4 +55,12 @@ public class Post {
 			.member(member)
 			.build();
 	}
+
+	public void updateContent(String content) {
+		this.content = content;
+	}
+
+	public void updatePostImage(PostImage postImage) {
+		this.postImage = postImage;
+	}
 }

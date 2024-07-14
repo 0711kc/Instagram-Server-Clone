@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +21,7 @@ import com.cow.cow_instagram_practice.image.service.ImageService;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.member.service.MemberService;
 import com.cow.cow_instagram_practice.post.controller.dto.request.PostRequest;
+import com.cow.cow_instagram_practice.post.controller.dto.request.UpdatePostRequest;
 import com.cow.cow_instagram_practice.post.controller.dto.response.PostResponse;
 import com.cow.cow_instagram_practice.post.service.PostService;
 
@@ -53,5 +58,23 @@ public class PostController {
 	@GetMapping("/all")
 	public ResponseEntity<List<PostResponse>> findAll() {
 		return postService.findAll();
+	}
+
+	@PatchMapping("/{postId}")
+	public ResponseEntity<PostResponse> update(@PathVariable Long postId,
+			@RequestBody @Valid UpdatePostRequest updatePostRequest) {
+		return postService.update(postId, updatePostRequest);
+	}
+
+	@PatchMapping("/{postId}/image")
+	public ResponseEntity<PostResponse> updatePostImage(@PathVariable Long postId,
+		@RequestParam("image") MultipartFile multipartFile) throws IOException {
+		PostImage postImage = imageService.uploadPostImage(multipartFile);
+		return postService.update(postId, postImage);
+	}
+
+	@DeleteMapping("/{postId}")
+	public ResponseEntity<Void> delete(@PathVariable Long postId) {
+		return postService.delete(postId);
 	}
 }
