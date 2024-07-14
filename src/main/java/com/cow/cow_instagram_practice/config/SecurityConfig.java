@@ -43,18 +43,12 @@ public class SecurityConfig implements WebMvcConfigurer {
 	};
 
 	// TODO TEMP - 나중에 지워야되는 화이트리스트 API
-	private final String[] TEMP_WHITE_LIST_POST = {
-		"/post/new/{memberId}"
-	};
-
 	private final String[] TEMP_WHITE_LIST_GET = {
 		"/post/{postId}",
-		"/post/all/{memberId}",
 		"/post/all"
 	};
 
 	private final String[] TEMP_WHITE_LIST_DELETE = {
-		"/member/{memberId}",
 		"/post/{postId}"
 	};
 
@@ -91,7 +85,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers(HttpMethod.POST, WHITE_LIST_POST).permitAll()
 				.requestMatchers(HttpMethod.GET, WHITE_LIST_GET).permitAll()
-				.requestMatchers(HttpMethod.POST, TEMP_WHITE_LIST_POST).permitAll()
 				.requestMatchers(HttpMethod.GET, TEMP_WHITE_LIST_GET).permitAll()
 				.requestMatchers(HttpMethod.DELETE, TEMP_WHITE_LIST_DELETE).permitAll()
 				.requestMatchers(HttpMethod.PATCH, TEMP_WHITE_LIST_PATCH).permitAll()

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
@@ -29,6 +30,12 @@ public class MemberControllerAdvice {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("[Error] 잘못된 요청입니다.");
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MalformedJwtException.class)
+	public ResponseEntity<String> handleMalformedJwtException(MalformedJwtException exception) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("[Error] 잘못된 형태의 토큰값입니다.");
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

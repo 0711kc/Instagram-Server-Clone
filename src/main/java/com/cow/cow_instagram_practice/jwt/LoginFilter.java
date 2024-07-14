@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
+	private static final Long TOKEN_PERIOD_MS = 60*1000L;
+
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
 
@@ -48,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 		String role = auth.getAuthority();
 
-		String token = jwtUtil.createJwt(username, role, 60*60*10L);
+		String token = jwtUtil.createJwt(username, role, TOKEN_PERIOD_MS);
 
 		response.addHeader("Authorization", "Bearer " + token);
 	}

@@ -1,6 +1,7 @@
 package com.cow.cow_instagram_practice.member.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -63,7 +64,7 @@ public class MemberController {
 			.body(MemberResponse.from(memberService.findOne(memberId)));
 	}
 
-	@DeleteMapping("/{memberId}")
+	@DeleteMapping
 	@Operation(summary = "삭제", description = "기존 회원 삭제")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204", description = "삭제 성공",
@@ -71,11 +72,11 @@ public class MemberController {
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
 			content = {@Content(schema = @Schema(hidden = true))})
 	})
-	public ResponseEntity<Void> delete(@PathVariable final String memberId) {
-		return memberService.delete(memberId);
+	public ResponseEntity<Void> delete(Principal principal) {
+		return memberService.delete(principal.getName());
 	}
 
-	@PatchMapping("/{memberId}")
+	@PatchMapping
 	@Operation(summary = "수정", description = "기존 회원 수정")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "수정 성공",
@@ -83,12 +84,12 @@ public class MemberController {
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
 			content = {@Content(schema = @Schema(hidden = true))})
 	})
-	public ResponseEntity<MemberResponse> update(@PathVariable final String memberId,
+	public ResponseEntity<MemberResponse> update(Principal principal,
 		@RequestBody @Valid UpdateMemberRequest updateMemberRequest) {
-		return memberService.updateById(memberId, updateMemberRequest);
+		return memberService.updateById(principal.getName(), updateMemberRequest);
 	}
 
-	@PatchMapping("/{memberId}/image")
+	@PatchMapping("/image")
 	@Operation(summary = "수정", description = "기존 회원 프로필 이미지 수정")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "수정 성공",
@@ -96,9 +97,9 @@ public class MemberController {
 		@ApiResponse(responseCode = "404", description = "존재하지 않는 회원",
 			content = {@Content(schema = @Schema(hidden = true))})
 	})
-	public ResponseEntity<MemberResponse> updateProfileImage(@PathVariable final String memberId,
+	public ResponseEntity<MemberResponse> updateProfileImage(Principal principal,
 		@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		ProfileImage profileImage = imageService.uploadProfileImage(multipartFile);
-		return memberService.updateImageById(memberId, profileImage);
+		return memberService.updateImageById(principal.getName(), profileImage);
 	}
 }

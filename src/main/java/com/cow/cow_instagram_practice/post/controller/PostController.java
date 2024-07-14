@@ -1,6 +1,7 @@
 package com.cow.cow_instagram_practice.post.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -36,11 +37,11 @@ public class PostController {
 	private final ImageService imageService;
 	private final MemberService memberService;
 
-	@PostMapping("/new/{memberId}")
+	@PostMapping("/new")
 	public ResponseEntity<PostResponse> create(@RequestPart(value = "request") @Valid final PostRequest postRequest,
-		@PathVariable String memberId, @RequestPart(value = "image") MultipartFile multipartFile) throws IOException {
+			@RequestPart(value = "image") MultipartFile multipartFile, Principal principal) throws IOException {
 		PostImage postImage = imageService.uploadPostImage(multipartFile);
-		Member member = memberService.findOne(memberId);
+		Member member = memberService.findOne(principal.getName());
 		return postService.create(member, postRequest, postImage);
 	}
 
@@ -49,9 +50,9 @@ public class PostController {
 		return postService.findOne(postId);
 	}
 
-	@GetMapping("/all/{memberId}")
-	public ResponseEntity<List<PostResponse>> findAllByMember(@PathVariable String memberId) {
-		Member member = memberService.findOne(memberId);
+	@GetMapping("/all/my")
+	public ResponseEntity<List<PostResponse>> findMyPostAll(Principal principal) {
+		Member member = memberService.findOne(principal.getName());
 		return postService.findAllByMember(member);
 	}
 
