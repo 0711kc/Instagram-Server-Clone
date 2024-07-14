@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(readOnly = true)
 	@Override
 	public Member findOne(String memberId) {
-		return memberRepository.findById(memberId)
+		return memberRepository.findByIdJoinFetch(memberId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
 	}
 
@@ -82,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public ResponseEntity<MemberResponse> updateById(String memberId, UpdateMemberRequest updateMemberRequest) {
-		Member member = memberRepository.findById(memberId)
+		Member member = memberRepository.findByIdJoinFetch(memberId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
 		UpdateMemberRequest existMember = UpdateMemberRequest.from(member);
 		copyNonNullProperties(updateMemberRequest, existMember);
@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public ResponseEntity<MemberResponse> updateImageById(String memberId, ProfileImage profileImage) {
-		Member member = memberRepository.findById(memberId)
+		Member member = memberRepository.findByIdJoinFetch(memberId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 사용자를 찾을 수 없습니다."));
 		member.updateProfileImage(profileImage);
 		memberRepository.save(member);

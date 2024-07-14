@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public ResponseEntity<PostResponse> findOne(Long postId) {
-		Post post = postRepository.findById(postId)
+		Post post = postRepository.findByIdJoinFetch(postId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
 		return ResponseEntity.status(HttpStatus.OK)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public ResponseEntity<List<PostResponse>> findAllByMember(Member member) {
-		List<PostResponse> responses = postRepository.findByMemberId(member.getId()).stream()
+		List<PostResponse> responses = postRepository.findByMemberIdJoinFetch(member.getId()).stream()
 			.map(PostResponse::from)
 			.toList();
 		return ResponseEntity.status(HttpStatus.OK)
@@ -66,7 +66,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public ResponseEntity<PostResponse> update(Long postId, UpdatePostRequest updatePostRequest) {
-		Post post = postRepository.findById(postId)
+		Post post = postRepository.findByIdJoinFetch(postId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
 		post.updateContent(updatePostRequest.getContent());
 		postRepository.save(post);
@@ -77,7 +77,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public ResponseEntity<PostResponse> update(Long postId, PostImage postImage) {
-		Post post = postRepository.findById(postId)
+		Post post = postRepository.findByIdJoinFetch(postId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
 		post.updatePostImage(postImage);
 		postRepository.save(post);
