@@ -15,7 +15,7 @@ public interface PostService {
 
 	ResponseEntity<PostResponse> findOne(Long postId);
 
-	ResponseEntity<List<PostResponse>> findAll();
+	ResponseEntity<List<PostResponse>> findAll(Long cursor);
 
 	ResponseEntity<List<PostResponse>> findAllByMember(Member member);
 

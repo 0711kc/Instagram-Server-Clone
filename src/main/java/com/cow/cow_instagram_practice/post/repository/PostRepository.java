@@ -3,6 +3,8 @@ package com.cow.cow_instagram_practice.post.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@Query("select p from Post p left join fetch p.postImage where p.id = :id")
 	Optional<Post> findByIdJoinFetch(Long id);
+
+	@Query("select p from Post p where p.id <= ?1 order by p.date desc")
+	Slice<Post> findNextPage(Long cursor, PageRequest pageRequest);
 }

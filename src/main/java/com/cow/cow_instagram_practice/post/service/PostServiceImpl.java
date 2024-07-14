@@ -3,6 +3,8 @@ package com.cow.cow_instagram_practice.post.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class PostServiceImpl implements PostService {
+	private static final int DEFAULT_PAGE__SIZE = 2;
+
 	private final PostRepository postRepository;
 
 	@Override
@@ -45,8 +49,10 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public ResponseEntity<List<PostResponse>> findAll() {
-		List<PostResponse> responses = postRepository.findAll().stream()
+	public ResponseEntity<List<PostResponse>> findAll(Long cursor) {
+		PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE__SIZE);
+		Slice<Post> posts = getAllPosts(pageRequest, cursor);
+		List<PostResponse> responses = posts.stream()
 			.map(PostResponse::from)
 			.toList();
 		return ResponseEntity.status(HttpStatus.OK)
@@ -94,5 +100,12 @@ public class PostServiceImpl implements PostService {
 		}
 		postRepository.deleteById(postId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	private Slice<Post> getAllPosts(PageRequest pageRequest, Long cursor) {
+		if (cursor == 0) {
+			return postRepository.findAll(pageRequest);
+		}
+		return postRepository.findNextPage(cursor, pageRequest);
 	}
 }

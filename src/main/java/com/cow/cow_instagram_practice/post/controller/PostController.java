@@ -57,8 +57,8 @@ public class PostController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<List<PostResponse>> findAll() {
-		return postService.findAll();
+	public ResponseEntity<List<PostResponse>> findAll(@RequestParam(value = "cursor") Long cursor) {
+		return postService.findAll(cursor);
 	}
 
 	@PatchMapping("/{postId}")
