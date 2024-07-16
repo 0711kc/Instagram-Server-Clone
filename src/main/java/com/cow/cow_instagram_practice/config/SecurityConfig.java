@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.cow.cow_instagram_practice.jwt.ExceptionHandlerFilter;
 import com.cow.cow_instagram_practice.jwt.JWTFilter;
 import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.jwt.LoginFilter;
@@ -27,38 +28,36 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
 
-	private final String[] WHITE_LIST_POST = {
+	private static final String[] WHITE_LIST_POST = {
 		"/member/new",
 		"/login",
 	};
 
-
-	private final String[] WHITE_LIST_GET = {
+	private static final String[] WHITE_LIST_GET = {
 		"/member/{memberId}"
 	};
 
-	private final String[] WHITE_LIST_SWAGGER = {
+	private static final String[] WHITE_LIST_SWAGGER = {
 		"/swagger-ui/**",
 		"/v3/api-docs/**"
 	};
 
 	// TODO TEMP - 나중에 지워야되는 화이트리스트 API
-	private final String[] TEMP_WHITE_LIST_GET = {
+	private static final String[] TEMP_WHITE_LIST_GET = {
 		"/post/{postId}",
 		"/post/all"
 	};
 
-	private final String[] TEMP_WHITE_LIST_DELETE = {
+	private static final String[] TEMP_WHITE_LIST_DELETE = {
 		"/post/{postId}"
 	};
 
-	private final String[] TEMP_WHITE_LIST_PATCH = {
+	private static final String[] TEMP_WHITE_LIST_PATCH = {
 		"/member/{memberId}",
 		"/member/{memberId}/image",
 		"/post/{postId}",
 		"/post/{postId}/image"
 	};
-
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -93,6 +92,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 		http
 			.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+
+		http
+			.addFilterBefore(new ExceptionHandlerFilter(), JWTFilter.class);
 
 		http
 			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
