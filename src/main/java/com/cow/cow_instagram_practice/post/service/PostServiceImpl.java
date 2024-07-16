@@ -40,12 +40,9 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public ResponseEntity<PostResponse> findOne(Long postId) {
-		Post post = postRepository.findByIdJoinFetch(postId)
+	public Post findOne(Long postId) {
+		return postRepository.findByIdJoinFetch(postId)
 			.orElseThrow(() -> new EntityNotFoundException("[Error] 게시글을 찾을 수 없습니다."));
-		return ResponseEntity.status(HttpStatus.OK)
-			.contentType(MediaType.APPLICATION_JSON)
-			.body(PostResponse.from(post));
 	}
 
 	@Override

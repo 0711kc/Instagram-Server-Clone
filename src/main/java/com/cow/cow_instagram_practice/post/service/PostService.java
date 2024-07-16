@@ -9,11 +9,12 @@ import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.post.controller.dto.request.PostRequest;
 import com.cow.cow_instagram_practice.post.controller.dto.request.UpdatePostRequest;
 import com.cow.cow_instagram_practice.post.controller.dto.response.PostResponse;
+import com.cow.cow_instagram_practice.post.entity.Post;
 
 public interface PostService {
 	ResponseEntity<PostResponse> create(Member member, PostRequest postRequest, PostImage postImage);
 
-	ResponseEntity<PostResponse> findOne(Long postId);
+	Post findOne(Long postId);
 
 	ResponseEntity<List<PostResponse>> findAll(Long cursor);
 

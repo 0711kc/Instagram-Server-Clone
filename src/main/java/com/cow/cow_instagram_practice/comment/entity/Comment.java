@@ -1,6 +1,7 @@
 package com.cow.cow_instagram_practice.comment.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.post.entity.Post;
@@ -14,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,9 +40,6 @@ public class Comment {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime date = LocalDateTime.now();
 
-	@Builder.Default
-	private Integer depth = 0;
-
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
 	private Member member;
@@ -49,15 +48,29 @@ public class Comment {
 	@JoinColumn(name = "post_id")
 	private Post post;
 
-	public static Comment of(final Long id, final String content, final LocalDateTime date, final Integer depth,
-		final Member member, final Post post) {
+	@OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
+	private List<Comment> child;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "parent_id")
+	private Comment parent;
+
+	public static Comment of(final String content, final LocalDateTime date, final Member member, final Post post,
+		final Comment parent) {
 		return Comment.builder()
-			.id(id)
 			.content(content)
 			.date(date)
-			.depth(depth)
 			.member(member)
 			.post(post)
+			.parent(parent)
 			.build();
+	}
+
+	public boolean isReply() {
+		return parent != null;
+	}
+
+	public void update(String content) {
+		this.content = content;
 	}
 }

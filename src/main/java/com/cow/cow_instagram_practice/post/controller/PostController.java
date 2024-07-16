@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,7 @@ public class PostController {
 
 	@PostMapping("/new")
 	public ResponseEntity<PostResponse> create(@RequestPart(value = "request") @Valid final PostRequest postRequest,
-			@RequestPart(value = "image") MultipartFile multipartFile, Principal principal) throws IOException {
+		@RequestPart(value = "image") MultipartFile multipartFile, Principal principal) throws IOException {
 		PostImage postImage = imageService.uploadPostImage(multipartFile);
 		Member member = memberService.findOne(principal.getName());
 		return postService.create(member, postRequest, postImage);
@@ -47,7 +49,9 @@ public class PostController {
 
 	@GetMapping("/{postId}")
 	public ResponseEntity<PostResponse> findPost(@PathVariable Long postId) {
-		return postService.findOne(postId);
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(PostResponse.from(postService.findOne(postId)));
 	}
 
 	@GetMapping("/all/my")
@@ -63,7 +67,7 @@ public class PostController {
 
 	@PatchMapping("/{postId}")
 	public ResponseEntity<PostResponse> update(@PathVariable Long postId,
-			@RequestBody @Valid UpdatePostRequest updatePostRequest) {
+		@RequestBody @Valid UpdatePostRequest updatePostRequest) {
 		return postService.update(postId, updatePostRequest);
 	}
 
