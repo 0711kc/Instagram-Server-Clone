@@ -13,6 +13,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/nuxt-auto-deploy
+  NAME: go_cicd
+
+
 jobs:
   build:
 
@@ -56,3 +61,21 @@ jobs:
 
       - name: Build with Gradle Wrapper
         run: ./gradlew clean build
+
+  deploy:
+    needs: build  # build 후에 실행되도록 정의
+    name: Deploy
+    runs-on: [ self-hosted, label-go ] # AWS ./configure에서 사용할 label명
+    steps:
+      - name: Login to ghcr
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      # 3000 -> 80 포트로 수행하도록 지정
+      - name: Docker run
+        run: |
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 8080:3306 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          
