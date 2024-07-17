@@ -1,6 +1,6 @@
 package com.cow.cow_instagram_practice.member.service;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Arrays;
@@ -19,14 +19,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.member.repository.MemberRepository;
-import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
@@ -60,7 +60,7 @@ public class MemberServiceTest {
 	public void getMember() {
 		String memberId = "test123";
 		Member member = setUpMember(memberId);
-		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+		given(memberRepository.findByIdJoinFetch(memberId)).willReturn(Optional.of(member));
 		Member findMember = memberService.findOne(memberId);
 
 		checkMember(findMember);
@@ -127,9 +127,9 @@ public class MemberServiceTest {
 	public void updateMember() {
 		String memberId = "test123";
 		Member member = setUpMember(memberId);
-		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+		given(memberRepository.findByIdJoinFetch(memberId)).willReturn(Optional.of(member));
 		UpdateMemberRequest updateMemberRequest = UpdateMemberRequest.builder()
-				.name("Lee Chan").phone("010-9876-5432").build();
+			.name("Lee Chan").phone("010-9876-5432").build();
 
 		MemberResponse beforeMemberResponse = MemberResponse.from(memberService.findOne(memberId));
 		ResponseEntity<MemberResponse> afterResponseEntity = memberService.updateById(memberId, updateMemberRequest);
@@ -150,7 +150,7 @@ public class MemberServiceTest {
 	public void updateImageMember() {
 		String memberId = "test123";
 		Member member = setUpMember(memberId);
-		given(memberRepository.findById(memberId)).willReturn(Optional.of(member));
+		given(memberRepository.findByIdJoinFetch(memberId)).willReturn(Optional.of(member));
 		ProfileImage profileImage = ProfileImage.builder().id(2L).imageLink("testLink").build();
 
 		MemberResponse beforeMemberResponse = MemberResponse.from(memberService.findOne(memberId));

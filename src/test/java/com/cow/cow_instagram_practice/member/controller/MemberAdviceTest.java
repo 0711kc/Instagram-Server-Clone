@@ -1,7 +1,6 @@
 package com.cow.cow_instagram_practice.member.controller;
 
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -24,7 +23,6 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.cow.cow_instagram_practice.image.service.ImageServiceImpl;
@@ -47,9 +45,6 @@ public class MemberAdviceTest {
 
 	@MockBean
 	ImageServiceImpl imageService;
-
-	@Autowired
-	WebApplicationContext context;
 
 	@Test
 	@DisplayName("존재하지 않는 회원 조회 테스트")
@@ -135,7 +130,7 @@ public class MemberAdviceTest {
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isBadRequest())
 			.andExpect(result -> Assertions.assertThat(
-					getApiResultExceptionClass(result)).isEqualTo(MethodArgumentNotValidException.class))
+				getApiResultExceptionClass(result)).isEqualTo(MethodArgumentNotValidException.class))
 			.andDo(print());
 
 		verifyNoInteractions(memberService);
@@ -145,7 +140,6 @@ public class MemberAdviceTest {
 	@DisplayName("이미지 파일 작업 실패 테스트")
 	@WithAnonymousUser
 	void failedImageFileTest() throws Exception {
-		String memberId = "0711kc";
 		MockMultipartFile imageFile = new MockMultipartFile(
 			"image",
 			"profile.png",
@@ -155,7 +149,7 @@ public class MemberAdviceTest {
 		given(imageService.uploadProfileImage(imageFile)).willThrow(new IOException());
 
 		mockMvc.perform(
-				multipart(HttpMethod.PATCH, "/member/" + memberId + "/image")
+				multipart(HttpMethod.PATCH, "/member/image")
 					.file(imageFile))
 			.andExpect(status().isInternalServerError())
 			.andDo(print());

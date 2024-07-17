@@ -18,17 +18,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.cow.cow_instagram_practice.config.WithAuthUser;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.image.service.ImageServiceImpl;
 import com.cow.cow_instagram_practice.jwt.JWTUtil;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRole;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
-import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.member.service.MemberServiceImpl;
 
@@ -45,17 +44,17 @@ public class MemberControllerTest {
 	@MockBean
 	ImageServiceImpl imageService;
 
-	@Autowired
-	WebApplicationContext context;
-
 	@Test
 	@DisplayName("회원 조회 테스트")
 	@WithAnonymousUser
 	void getMemberTest() throws Exception {
 		String memberId = "0711kc";
-
+		ProfileImage profileImage = ProfileImage.from("testLink");
 		given(memberService.findOne(memberId)).willReturn(
-			Member.builder().build()
+			Member.builder()
+				.id(memberId).name("Kim Chan").nickname("KC1234")
+				.phone("010-1234-5678").email("123asd@gmail.com").role("ROLE_ADMIN").profileImage(profileImage)
+				.build()
 		);
 
 		mockMvc.perform(
@@ -93,7 +92,7 @@ public class MemberControllerTest {
 
 	@Test
 	@DisplayName("회원 삭제 테스트")
-	@WithMockUser
+	@WithAuthUser(id = "0711kc", role = "ROLE_ADMIN")
 	void deleteMemberTest() throws Exception {
 		String memberId = "0711kc";
 
@@ -102,7 +101,7 @@ public class MemberControllerTest {
 		);
 
 		mockMvc.perform(
-				delete("/member/" + memberId))
+				delete("/member"))
 			.andExpect(status().isNoContent())
 			.andDo(print());
 
@@ -111,7 +110,7 @@ public class MemberControllerTest {
 
 	@Test
 	@DisplayName("회원 수정 테스트")
-	@WithMockUser
+	@WithAuthUser(id = "0711kc", role = "ROLE_ADMIN")
 	void updateMemberTest() throws Exception {
 		String memberId = "0711kc";
 
@@ -123,7 +122,7 @@ public class MemberControllerTest {
 		);
 
 		mockMvc.perform(
-				patch("/member/" + memberId)
+				patch("/member")
 					.content(json)
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
@@ -134,7 +133,7 @@ public class MemberControllerTest {
 
 	@Test
 	@DisplayName("회원 프로필 수정 테스트")
-	@WithMockUser
+	@WithAuthUser(id = "0711kc", role = "ROLE_ADMIN")
 	void updateImageMemberTest() throws Exception {
 		String memberId = "0711kc";
 		MockMultipartFile imageFile = new MockMultipartFile(
@@ -150,7 +149,7 @@ public class MemberControllerTest {
 		);
 
 		mockMvc.perform(
-				multipart(HttpMethod.PATCH, "/member/" + memberId + "/image")
+				multipart(HttpMethod.PATCH, "/member/image")
 					.file(imageFile))
 			.andExpect(status().isOk())
 			.andDo(print());
