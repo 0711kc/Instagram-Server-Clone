@@ -82,4 +82,10 @@ public class PostController {
 	public ResponseEntity<Void> delete(@PathVariable Long postId) {
 		return postService.delete(postId);
 	}
+
+	@GetMapping("/feed")
+	public ResponseEntity<List<PostResponse>> getFeed(@RequestParam(value = "cursor") Long cursor,
+		Principal principal) {
+		return postService.getFeed(principal.getName(), cursor);
+	}
 }

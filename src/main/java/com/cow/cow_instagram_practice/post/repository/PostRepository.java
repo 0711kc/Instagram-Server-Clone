@@ -8,6 +8,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.post.entity.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -19,4 +20,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	@Query("select p from Post p where p.id <= ?1 order by p.date desc")
 	Slice<Post> findNextPage(Long cursor, PageRequest pageRequest);
+
+	@Query("select p from Post p where p.member in (:members) order by p.date desc")
+	Slice<Post> findByMemberIdIn(PageRequest pageRequest, List<Member> members);
+
+	@Query("select p from Post p where p.id <= :cursor and p.member in (:members) order by p.date desc")
+	Slice<Post> findByMemberIdIn(Long cursor, PageRequest pageRequest, List<Member> members);
 }

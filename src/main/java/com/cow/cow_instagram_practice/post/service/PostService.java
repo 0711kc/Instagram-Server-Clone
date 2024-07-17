@@ -25,4 +25,6 @@ public interface PostService {
 	ResponseEntity<PostResponse> update(Long postId, PostImage postImage);
 
 	ResponseEntity<Void> delete(Long postId);
+
+	ResponseEntity<List<PostResponse>> getFeed(String name, Long cursor);
 }

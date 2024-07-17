@@ -16,13 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cow.cow_instagram_practice.follow.repository.FollowRepository;
+import com.cow.cow_instagram_practice.image.entity.ProfileImage;
+import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 import com.cow.cow_instagram_practice.member.controller.dto.request.MemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.request.UpdateMemberRequest;
 import com.cow.cow_instagram_practice.member.controller.dto.response.MemberResponse;
 import com.cow.cow_instagram_practice.member.entity.Member;
-import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.member.repository.MemberRepository;
-import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 	private final ProfileImageRepository profileImageRepository;
+	private final FollowRepository followRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
@@ -112,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
 		BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
 	}
 
-	private static String[] getNullPropertyNames (Object source) {
+	private static String[] getNullPropertyNames(Object source) {
 		final BeanWrapper src = new BeanWrapperImpl(source);
 		java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 

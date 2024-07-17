@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cow.cow_instagram_practice.follow.entity.Follow;
+import com.cow.cow_instagram_practice.follow.repository.FollowRepository;
 import com.cow.cow_instagram_practice.image.entity.PostImage;
 import com.cow.cow_instagram_practice.member.entity.Member;
 import com.cow.cow_instagram_practice.post.controller.dto.request.PostRequest;
@@ -29,6 +31,7 @@ public class PostServiceImpl implements PostService {
 	private static final int DEFAULT_PAGE__SIZE = 2;
 
 	private final PostRepository postRepository;
+	private final FollowRepository followRepository;
 
 	@Override
 	public ResponseEntity<PostResponse> create(Member member, PostRequest postRequest, PostImage postImage) {
@@ -99,10 +102,32 @@ public class PostServiceImpl implements PostService {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
+	@Override
+	public ResponseEntity<List<PostResponse>> getFeed(String followerId, Long cursor) {
+		PageRequest pageRequest = PageRequest.of(0, DEFAULT_PAGE__SIZE);
+		List<Member> followings = followRepository.findByFollowerId(followerId).stream()
+			.map(Follow::getFollowing)
+			.toList();
+		Slice<Post> posts = getAllPostsByMembers(followings, cursor, pageRequest);
+		List<PostResponse> responses = posts.stream()
+			.map(PostResponse::from)
+			.toList();
+		return ResponseEntity.status(HttpStatus.OK)
+			.contentType(MediaType.APPLICATION_JSON)
+			.body(responses);
+	}
+
 	private Slice<Post> getAllPosts(PageRequest pageRequest, Long cursor) {
 		if (cursor == 0) {
 			return postRepository.findAll(pageRequest);
 		}
 		return postRepository.findNextPage(cursor, pageRequest);
+	}
+
+	private Slice<Post> getAllPostsByMembers(List<Member> members, Long cursor, PageRequest pageRequest) {
+		if (cursor == 0) {
+			return postRepository.findByMemberIdIn(pageRequest, members);
+		}
+		return postRepository.findByMemberIdIn(cursor, pageRequest, members);
 	}
 }
