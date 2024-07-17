@@ -61,6 +61,7 @@ public class MemberServiceTest {
 		String memberId = "test123";
 		Member member = setUpMember(memberId);
 		given(memberRepository.findByIdJoinFetch(memberId)).willReturn(Optional.of(member));
+
 		Member findMember = memberService.findOne(memberId);
 
 		checkMember(findMember);

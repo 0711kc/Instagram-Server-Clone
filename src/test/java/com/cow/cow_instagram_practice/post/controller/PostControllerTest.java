@@ -124,7 +124,7 @@ public class PostControllerTest {
 		mockMvc.perform(
 				patch("/post/" + postId)
 					.content(json)
-					.contentType("application/json"))
+					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andDo(print());
 
