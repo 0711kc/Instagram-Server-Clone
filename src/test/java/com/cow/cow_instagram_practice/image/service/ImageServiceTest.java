@@ -1,6 +1,6 @@
-package com.cow.cow_instagram_practice.member.service;
+package com.cow.cow_instagram_practice.image.service;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
-import com.cow.cow_instagram_practice.image.service.ImageServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageServiceTest {
@@ -31,7 +30,6 @@ public class ImageServiceTest {
 
 	@Mock
 	ProfileImageRepository profileImageRepository;
-
 
 	@Test
 	@DisplayName("이미지 업로드")

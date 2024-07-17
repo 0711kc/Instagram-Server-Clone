@@ -1,4 +1,4 @@
-package com.cow.cow_instagram_practice.member.repository;
+package com.cow.cow_instagram_practice.follow.repository;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.cow.cow_instagram_practice.member.entity.Follow;
+import com.cow.cow_instagram_practice.follow.entity.Follow;
 import com.cow.cow_instagram_practice.member.entity.Member;
 
 @DataJpaTest
@@ -35,8 +35,8 @@ public class FollowRepositoryTest {
 		Follow createdFollow = Follow.of(follower, following);
 		Follow savedFollow = followRepository.save(createdFollow);
 
-		Assertions.assertThat(savedFollow.getFollowing()).isEqualTo(following);
-		Assertions.assertThat(savedFollow.getFollower()).isEqualTo(follower);
+		Assertions.assertThat(savedFollow.getFollowing().getId()).isEqualTo("abcde");
+		Assertions.assertThat(savedFollow.getFollower().getId()).isEqualTo("qwert");
 	}
 
 	@Test

@@ -1,4 +1,4 @@
-package com.cow.cow_instagram_practice.member.repository;
+package com.cow.cow_instagram_practice.image.repository;
 
 import java.util.Optional;
 
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.cow.cow_instagram_practice.image.repository.ProfileImageRepository;
 import com.cow.cow_instagram_practice.image.entity.ProfileImage;
 
 @DataJpaTest
@@ -29,6 +28,7 @@ public class ProfileImageRepositoryTest {
 		Assertions.assertThat(savedProfileImage.getId()).isEqualTo(2L);
 		Assertions.assertThat(savedProfileImage.getImageLink()).isEqualTo(imageLink);
 	}
+
 	@Test
 	@DisplayName("이미지 불러오기")
 	void getProfileImage() {
