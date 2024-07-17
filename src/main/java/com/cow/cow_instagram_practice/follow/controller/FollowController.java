@@ -1,4 +1,4 @@
-package com.cow.cow_instagram_practice.follow;
+package com.cow.cow_instagram_practice.follow.controller;
 
 import java.security.Principal;
 
